@@ -16,7 +16,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import os
 
 
-os.chdir("D:/Meu Drive/Python_workspace")
+os.chdir("python")
 dir = os.getcwd()
 
 # 1. Carregar o dataset gerado
