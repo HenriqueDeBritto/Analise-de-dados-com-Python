@@ -4,6 +4,7 @@ Created on Sun Aug 16 22:33:40 2026
 
 @author: carlo
 """
+#%%
 from instalar_pacotes import instalar_pacotes
 
 pacotes = [
@@ -37,39 +38,38 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-# 1. Carregar o dataset gerado
+#%% 1. Carregar o dataset gerado
 df = pd.read_excel(BASE_DIR / "triagem_em_ubs.xlsx")
 
 
-# 2. Separar variáveis preditoras (X) e alvo (y)
+#%% 2. Separar variáveis preditoras (X) e alvo (y)
 X = df[['febre', 'tosse', 'dor_corpo', 'fadiga']]
 y = df['gripe_resfriado']
 
-# 3. Codificar atributos categóricos em valores inteiros para o CategoricalNB
-# Ordinal Encoder: Converte categorias textuais em números inteiros sequenciais (ex: de 0 a n-1).
+#%% 3. Codificar atributos categóricos em valores inteiros para o CategoricalNB Ordinal Encoder: Converte categorias textuais em números inteiros sequenciais (ex: de 0 a n-1).
 
 encoder = OrdinalEncoder()
 X_encoded = encoder.fit_transform(X)
 
-# 4. Divisão em dados de treino (75%) e teste (25%) com estratificação
+#%% 4. Divisão em dados de treino (75%) e teste (25%) com estratificação
 # 42 é o Seed
 X_train, X_test, y_train, y_test = train_test_split(
     X_encoded, y, test_size=0.25, random_state=42, stratify=y
 )
 
-# 5. Treinio do modelo Instanciar e treinar o classificador Naïve Bayes Categórico 
+#%% 5. Treinio do modelo Instanciar e treinar o classificador Naïve Bayes Categórico 
 model = CategoricalNB()
 model.fit(X_train, y_train)
 
-# 6. Predição nos dados de teste
+#%% 6. Predição nos dados de teste
 y_pred = model.predict(X_test)
 y_proba = model.predict_proba(X_test)[:, 1] # Probabilidade da classe positiva (Gripe)
 
-# 7. Exibir relatório de classificação no console
+#%% 7. Exibir relatório de classificação no console
 print("--- RELATÓRIO DE CLASSIFICAÇÃO ---")
 print(classification_report(y_test, y_pred, target_names=['Resfriado/Outro (0)', 'Gripe (1)']))
 
-# 8. Visualização dos Resultados (Matriz de Confusão + Curva ROC)
+#%% 8. Visualização dos Resultados (Matriz de Confusão + Curva ROC)
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 # Plot 1: Matriz de Confusão
@@ -98,8 +98,9 @@ axes[1].grid(True, linestyle=':', alpha=0.6)
 plt.tight_layout()
 plt.show()
 
-# usar o modelo
+#%% usar o modelo
 df2 = pd.read_excel(BASE_DIR / "novos_pacientes_para_predicao.xlsx")
 x2 = df2[['febre', 'tosse', 'dor_corpo', 'fadiga']]
 x2_encoded = encoder.transform(x2)
 y2_pred = model.predict(x2_encoded)
+
