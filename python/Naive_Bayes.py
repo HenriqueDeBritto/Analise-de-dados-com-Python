@@ -4,6 +4,23 @@ Created on Sun Aug 16 22:33:40 2026
 
 @author: carlo
 """
+from instalar_pacotes import instalar_pacotes
+
+pacotes = [
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "seaborn",
+    "scikit-learn",
+    "openpyxl"
+]
+
+nomes_import = {
+    "scikit-learn": "sklearn"
+}
+
+instalar_pacotes(pacotes, nomes_import)
+
 
 import pandas as pd
 import numpy as np
@@ -16,11 +33,13 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import os
 
 
-os.chdir("D:/Meu Drive/Python_workspace")
-dir = os.getcwd()
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
 
 # 1. Carregar o dataset gerado
-df = pd.read_excel('triagem_em_ubs.xlsx')
+df = pd.read_excel(BASE_DIR / "triagem_em_ubs.xlsx")
+
 
 # 2. Separar variáveis preditoras (X) e alvo (y)
 X = df[['febre', 'tosse', 'dor_corpo', 'fadiga']]
@@ -80,8 +99,7 @@ plt.tight_layout()
 plt.show()
 
 # usar o modelo
-df2 = pd.read_excel('novos_pacientes_para_predicao.xlsx')
+df2 = pd.read_excel(BASE_DIR / "novos_pacientes_para_predicao.xlsx")
 x2 = df2[['febre', 'tosse', 'dor_corpo', 'fadiga']]
-x2_encoded = encoder.fit_transform(x2)
-y2_pred = model.predict(x2_encoded)
+x2_encoded = encoder.transform(x2)
 y2_pred = model.predict(x2_encoded)
